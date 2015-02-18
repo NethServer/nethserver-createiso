@@ -182,8 +182,7 @@ def write_config():
         --gateway=%s \
         --nameserver=%s \
         --device=%s \
-        --hostname=%s \
-        --onboot=yes' % (config['ipaddr'], config['netmask'], config['gateway'], config['dns'], config['interface'], config['hostname']) )
+        --onboot=yes' % (config['ipaddr'], config['netmask'], config['gateway'], config['dns'], config['interface']) )
     # disable all other interfaces
     for interface in get_interfaces():
         interface = interface[1]
@@ -257,9 +256,8 @@ def netinterfaces_page():
 
 def network_page():
     global config
-    button, (hostname, ipaddr, netmask, gateway, dns) = EntryWindow(screen,
+    button, (ipaddr, netmask, gateway, dns) = EntryWindow(screen,
         T('NETWORK_TITLE'), T('NETWORK_DESC') % config['interface'], [
-        (T('FQDN'), Entry(30, 'server.example.org')),
         (T('IPADDR'), Entry(30, '192.168.1.1')),
         (T('NETMASK'), Entry(30, '255.255.255.0')),
         (T('GATEWAY'), Entry(30, '192.168.1.253')),
@@ -267,7 +265,6 @@ def network_page():
     ], buttons=[(T('NEXT'), 0), (T('BACK'), 1)])
 
     if button == 0:
-        config['hostname'] = hostname
         config['ipaddr'] = ipaddr
         config['netmask'] = netmask
         config['gateway'] = gateway
