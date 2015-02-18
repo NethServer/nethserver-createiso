@@ -138,12 +138,21 @@ def get_devices():
             '/dev/sdd',
         ]
 
+def read_file(file):
+    try:
+        with open (file, "r") as f:
+            return f.read().replace('\n', '')
+    except:
+        return '-'
+
 def get_interfaces():
     interfaces = []
     for f in glob('/sys/class/net/*'):
         d = f.split('/')[4];
         if d != 'lo':
-            interfaces.append(d)
+            link = read_file(f+"/carrier")
+            address = read_file(f+"/address")
+            interfaces.append(("%s (MAC: %s  Link: %s)" % (d, address, link), d))
     return interfaces
 
 def write_include(file, text):
@@ -177,6 +186,7 @@ def write_config():
         --onboot=yes' % (config['ipaddr'], config['netmask'], config['gateway'], config['dns'], config['interface'], config['hostname']) )
     # disable all other interfaces
     for interface in get_interfaces():
+        interface = interface[1]
         if (interface != config['interface']):
             write_include('/tmp/network-include', 'network --bootproto=static --onboot=no --device=%s' % interface)
 
@@ -233,11 +243,11 @@ def netinterfaces_page():
             T('NETINTERFACES_DESC'),
             interfaces,
             buttons = [(T('NEXT'), 0), (T('BACK'), 1)],
-            scroll = 0,
-            height = 2
+            scroll = 1,
+            height = 4
     )
     if button == 0:
-        config['interface'] = interfaces[interface]
+        config['interface'] = interface
         network_page()
     elif button == 1:
         raid_page()
