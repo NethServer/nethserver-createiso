@@ -390,7 +390,7 @@ def main():
 
     screen.drawRootText(0, 0, "NethServer")
 
-    copyright_text = " 2014 NethServer, http://www.nethserver.org"
+    copyright_text = " 2015 NethServer, http://www.nethserver.org"
     copyright_pad = screen.width - len(copyright_text)
     screen.drawRootText(copyright_pad, 0, copyright_text)
 
