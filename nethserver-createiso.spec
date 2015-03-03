@@ -1,6 +1,6 @@
 Name:           nethserver-createiso
 Version:        0.0.2
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Create NethServer ISO file
 BuildArch:	noarch
 
@@ -16,6 +16,7 @@ Requires: intltool
 Requires: isomd5sum
 Requires: syslinux
 Requires: tar
+Requires: createrepo
 Requires: yum-plugin-downloadonly
 
 
@@ -77,6 +78,9 @@ done
 %doc COPYING
 
 %changelog
+* Tue Mar  3 2015 Davide Principi <davide.principi@nethesis.it> - 0.0.2-3
+- Added Requires: createrepo
+
 * Tue Jan 27 2015 Davide Principi <davide.principi@nethesis.it> - 0.0.2-1
 - Use YUM mirrorlist plugin
 
