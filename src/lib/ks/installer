@@ -249,7 +249,11 @@ def netinterfaces_page():
         config['interface'] = interface
         network_page()
     elif button == 1:
-        raid_page()
+        devices = get_devices()
+        if len(devices) <= 1:
+            lang_page()
+        else:
+            raid_page()
     else:
         netinterfaces_page()
 
