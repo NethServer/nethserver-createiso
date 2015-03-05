@@ -168,7 +168,7 @@ echo "  * Installing @nethserver-iso and ${brand_packages}..."
 mock -r ${mock_config} --yum-cmd -- --downloadonly --downloaddir=${CLONE_ISO}/extras install @nethserver-iso ${brand_packages} || :
 
 echo "Extracting nethserver-base yum groups metadata..."
-mock -r nethserver-iso-6.6-x86_64 --copyout /var/cache/yum/nethserver-base/gen/groups.xml ${COMPS_TMP}
+mock -r nethserver-iso-6.6-x86_64 --copyout /var/cache/yum/nethserver-updates/gen/groups.xml ${COMPS_TMP}
 
 echo "Creating yum repository..."
 createrepo -g ${COMPS_TMP} ${CLONE_ISO}/extras/
