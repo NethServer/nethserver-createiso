@@ -1,5 +1,5 @@
 Name:           nethserver-createiso
-Version: 1.0.0
+Version: 1.0.1
 Release: 1%{?dist}
 Summary:        Create NethServer ISO file
 BuildArch:	noarch
@@ -78,6 +78,9 @@ done
 %doc COPYING
 
 %changelog
+* Thu Mar 05 2015 Davide Principi <davide.principi@nethesis.it> - 1.0.1-1
+- Put YUM groups from nethserver-updates into ISO
+
 * Thu Mar 05 2015 Davide Principi <davide.principi@nethesis.it> - 1.0.0-1
 - Interactive installer: show ethernet mac addresses - Enhancement #3047 [NethServer]
 - nethserver-devbox replacements - Feature #3009 [NethServer]
