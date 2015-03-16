@@ -42,13 +42,10 @@ nethserver-enterprise/splash.png
 nethserver-enterprise/splash.jpg
 nethserver-enterprise/brand_packages
 nethserver-enterprise/mock_config
-nethserver/splash3.xcf
 nethserver/splash.xcf
-nethserver/splash4.xcf
 nethserver/splash.xpm.gz
 nethserver/convert.sh
 nethserver/splash.png
-nethserver/splash2.xcf
 nethserver/splash.jpg
 nethserver/mock_config
 ks/ks-crypted.cfg
