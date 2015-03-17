@@ -1,5 +1,5 @@
 Name:           nethserver-createiso
-Version: 1.0.1
+Version: 1.1.0
 Release: 1%{?dist}
 Summary:        Create NethServer ISO file
 BuildArch:	noarch
@@ -76,6 +76,10 @@ done
 %doc COPYING
 
 %changelog
+* Tue Mar 17 2015 Davide Principi <davide.principi@nethesis.it> - 1.1.0-1
+- Honour nethserver-iso group definition from YUM repositories.
+- Removed old splash screen files.
+
 * Thu Mar 05 2015 Davide Principi <davide.principi@nethesis.it> - 1.0.1-1
 - Put YUM groups from nethserver-updates into ISO
 
