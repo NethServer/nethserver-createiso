@@ -59,8 +59,8 @@ function exit_error {
 function help {
    echo "Usage: $0 -i input.iso -n product_name -v product_version" >&2
    echo '
-             -i input.is          : The CentOS minimal ISO file
-             -n product_name      : The first part of the output file name
+             -i input.iso         : The CentOS minimal ISO file
+             -n product_basename  : The first part of the output file name
              -v product_version   : major.minor[-release] 
 ' >&2
 }
@@ -82,14 +82,14 @@ function prepare_clone_iso {
 while getopts "i:n:v:h" opt; do
     case $opt in
 	i)
-	    INPUT_ISO=$OPTARG
-	    [ -z "${INPUT_ISO}" ] && exit_error "No input iso file given"
+	    input_iso=$OPTARG
+	    [ -z "${input_iso}" ] && exit_error "No input iso file given"
 	    ;;
 	n)
-	    PRODUCT_NAME=$OPTARG
+	    input_product_basename=$OPTARG
 	    ;;
 	v)
-	    PRODUCT_VERSION=$OPTARG
+	    input_product_version=$OPTARG
 	    ;;
 	h)
 	    help
@@ -102,39 +102,37 @@ while getopts "i:n:v:h" opt; do
     esac
 done
 
-if [ -z "${PRODUCT_NAME}" ]; then
+if [ -z "${input_product_basename}" ]; then
     help
-    exit_error "Missing product_name argument"
+    exit_error "-n: missing name argument"
 fi
-if [ -z "${PRODUCT_VERSION}" ]; then
+if [ -z "${input_product_version}" ]; then
     help
-    exit_error "Missing product_version argument"
+    exit_error "-v: missing version argument"
 fi
 
-PRODUCT_ARCH=${PRODUCT_ARCH:-x86_64}
-PRODUCT_NAME=$(echo ${PRODUCT_NAME} | tr '[:upper:]' '[:lower:]')
-PRODUCT_VERSION=$(echo ${PRODUCT_VERSION} | tr '[:upper:]' '[:lower:]')
-BRAND_DIR=${ISO_LIB}/${PRODUCT_NAME}
-if [ ! -d "${BRAND_DIR}" ]; then
-    BRAND_DIR=${ISO_LIB}/nethserver
+BRAND_DIR=${ISO_LIB}/${input_product_basename}
+if [ ! -f "${BRAND_DIR}/config" ]; then
+    exit_error "Invalid product name. Please see ${ISO_LIB}"
 fi
 
-mock_config=${BRAND_DIR}/mock_config
-if [ -f "${BRAND_DIR}/mock_config" ]; then
-    mock_config=$(cat "${BRAND_DIR}/mock_config")
-else 
-    exit_error "Missing ${BRAND_DIR}/mock_config file"
-fi
+source "${BRAND_DIR}/config"
+
+product_basename=${input_product_basename}
+product_version=${input_product_version:-${product_version}}
+product_arch=${product_arch:-x86_64}
 
 echo "Using the following parameters:
-   * Product name: ${PRODUCT_NAME}
-   * Product version: ${PRODUCT_VERSION}
-   * Product arch: ${PRODUCT_ARCH}
+   * ${product_name}
+        basename: ${product_basename}
+        version: ${product_version}
+        arch: ${product_arch}
    * Mock configuration: ${mock_config}
+
 "
 
-if ! [ -r "${INPUT_ISO}" ]; then
-    exit_error "Could not read input iso file ${INPUT_ISO}."
+if ! [ -r "${input_iso}" ]; then
+    exit_error "Could not read input iso file ${input_iso}."
 fi
 
 # Temporary directories:
@@ -152,35 +150,17 @@ function cleanup_temporary_files {
 
 trap cleanup_temporary_files EXIT SIGTERM
 
-prepare_clone_iso ${INPUT_ISO} ${MOUNT_ISO} ${CLONE_ISO}
+prepare_clone_iso ${input_iso} ${MOUNT_ISO} ${CLONE_ISO}
 
 echo "Creating ISO directories..."
 mkdir -vp ${CLONE_ISO}/{isolinux,ks,extras}
 
-echo "Installing yum-plugin-downloadonly..."
-mock -r ${mock_config} --install yum-plugin-downloadonly
-
-if [ -f ${BRAND_DIR}/brand_packages ]; then
-   brand_packages=$(cat ${BRAND_DIR}/brand_packages)
-fi
-echo "Ignoring errors from yum downloadonly:"
-echo "  * Installing @nethserver-iso and ${brand_packages}..."
-mock -r ${mock_config} --yum-cmd -- --downloadonly --downloaddir=${CLONE_ISO}/extras install @nethserver-iso ${brand_packages} || :
-
-echo "Extracting nethserver-base yum groups metadata..."
-mock -r nethserver-iso-6.6-x86_64 --copyout /var/cache/yum/nethserver-updates/gen/groups.xml ${COMPS_TMP}
-
-echo "Creating yum repository..."
-createrepo -g ${COMPS_TMP} ${CLONE_ISO}/extras/
-
-echo "Copying GPG keys..."
-cp -v $ISO_LIB/RPM-GPG-KEY-* ${CLONE_ISO}/
-
 echo "Copying brand files..."
 cp -v $BRAND_DIR/splash.jpg ${CLONE_ISO}/isolinux/
 
-echo "Updating isolinux configuration..."
-sed "s/_NSRVRELEASE_/$PRODUCT_VERSION/" $ISO_LIB/isolinux.cfg > ${CLONE_ISO}/isolinux/isolinux.cfg
+echo "Creating isolinux configuration..."
+sed "s/_PRODUCTVERSION_/${product_version}/
+s/_PRODUCTNAME_/${product_name}/" $ISO_LIB/isolinux.cfg > ${CLONE_ISO}/isolinux/isolinux.cfg
 
 echo "Copying syslinux hardware detection tool..."
 cp -v /usr/share/syslinux/hdt.c32 ${CLONE_ISO}/isolinux/
@@ -189,9 +169,49 @@ echo "Copying kickstart files..."
 cat ${ISO_LIB}/ks/{start.ks,installer,end.ks} > ${CLONE_ISO}/ks/ks-interactive.cfg
 cat ${ISO_LIB}/ks/ks-unattended.cfg > ${CLONE_ISO}/ks/ks-unattended.cfg
 
-OUTPUT_ISO="${WORKDIR}/${PRODUCT_NAME}-${PRODUCT_VERSION}-${PRODUCT_ARCH}.iso"
+echo "Installing yum-plugin-downloadonly..."
+mock -r ${mock_config} --install yum-plugin-downloadonly
+
+echo "Downloading packages from @nethserver-iso group and their dependencies..."
+mock -r ${mock_config} --yum-cmd -- --downloadonly --downloaddir=${CLONE_ISO}/extras install @nethserver-iso || :
+echo "[Ignore errors from bogus yum downloadonly exit code]"
+
+echo "Creating yum groups metadata..."
+iso_packages=$(mock -r ${mock_config} --yum-cmd -- groupinfo nethserver-iso | sed -n '/   \w/ p' | tr -d '\r' | sort)
+echo "The following packages will be added to ${input_iso} and installed in the final system:"
+for P in ${iso_packages}; do
+    echo "   $P"
+    packagereqs+="<packagereq type='mandatory'>${P}</packagereq>" 
+done
+echo "...dependencies are excluded here: yum will take care of them."
+
+cat - > ${COMPS_TMP} <<EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE comps PUBLIC "-//Red Hat, Inc.//DTD Comps info//EN" "comps.dtd">
+<comps>
+  <group>
+   <id>nethserver-iso</id>
+   <default>false</default>
+   <uservisible>false</uservisible>
+   <display_order>1024</display_order>
+   <name>${product_name} ISO</name>
+   <description>${product_name} ISO group</description>
+    <packagelist>
+      ${packagereqs}
+    </packagelist>
+  </group>
+</comps>
+EOF
+
+echo "Creating yum repository with groups metadata..."
+createrepo -g ${COMPS_TMP} ${CLONE_ISO}/extras/
+
+echo "Copying GPG keys..."
+cp -v $ISO_LIB/RPM-GPG-KEY-* ${CLONE_ISO}/
+
+OUTPUT_ISO="${WORKDIR}/${product_basename}-${product_version}-${product_arch}.iso"
 echo "Creating ${OUTPUT_ISO} ..."
-mkisofs -o ${OUTPUT_ISO} -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -R -v -J -T -V "${PRODUCT_NAME}" ${CLONE_ISO}
+mkisofs -o ${OUTPUT_ISO} -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -R -v -J -T -V "${product_basename}" ${CLONE_ISO}
 
 echo "Implanting ISO checksum..."
 implantisomd5 --force "${OUTPUT_ISO}"
