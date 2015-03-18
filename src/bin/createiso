@@ -174,6 +174,11 @@ mock -r ${mock_config} --yum-cmd -- --downloadonly --downloaddir=${CLONE_ISO}/ex
 mock -r ${mock_config} --yum-cmd -- --downloadonly --downloaddir=${CLONE_ISO}/extras install @nethserver-iso || :
 echo "[Ignore errors from bogus yum downloadonly exit code]"
 
+echo "Extra RPMs added to ISO:"
+find ${CLONE_ISO}/extras -name '*.rpm' -printf "%f\n" | sort
+echo -ne "\nDisk usage: "; du -h -s ${CLONE_ISO}/extras
+
+
 echo "Creating yum groups metadata..."
 iso_packages=$(mock -r ${mock_config} --yum-cmd -- groupinfo nethserver-iso | sed -n '/   \w/ p' | tr -d '\r' | sort)
 echo "The following packages will be added to ${input_iso} and installed in the final system:"
