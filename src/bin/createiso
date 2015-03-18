@@ -169,10 +169,8 @@ echo "Copying kickstart files..."
 cat ${ISO_LIB}/ks/{start.ks,installer,end.ks} > ${CLONE_ISO}/ks/ks-interactive.cfg
 cat ${ISO_LIB}/ks/ks-unattended.cfg > ${CLONE_ISO}/ks/ks-unattended.cfg
 
-echo "Installing yum-plugin-downloadonly..."
-mock -r ${mock_config} --install yum-plugin-downloadonly
-
 echo "Downloading packages from @nethserver-iso group and their dependencies..."
+mock -r ${mock_config} --yum-cmd -- --downloadonly --downloaddir=${CLONE_ISO}/extras reinstall yum-plugin-downloadonly || :
 mock -r ${mock_config} --yum-cmd -- --downloadonly --downloaddir=${CLONE_ISO}/extras install @nethserver-iso || :
 echo "[Ignore errors from bogus yum downloadonly exit code]"
 
