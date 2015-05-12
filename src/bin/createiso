@@ -32,11 +32,6 @@ fi
 
 USER_GROUPS=$(groups)
 
-if [[ "${USER_GROUPS}" != *"fuse"* ]]; then
-    echo "You must be member of fuse group!" 1>&2;
-    exit 1;
-fi
-
 if [[ "${USER_GROUPS}" != *"mock"* ]]; then
     echo "You must be member of mock group!" 1>&2;
     exit 1;
@@ -180,7 +175,7 @@ echo -ne "\nDisk usage: "; du -h -s ${CLONE_ISO}/extras
 
 
 echo "Creating yum groups metadata..."
-iso_packages=$(mock -r ${mock_config} --yum-cmd -- groupinfo nethserver-iso | sed -n '/   \w/ p' | tr -d '\r' | sort)
+iso_packages=$(mock -r ${mock_config} --yum-cmd -- groupinfo nethserver-iso | sed -n '/   .\w/ p' | tr -d '\r' | cut -b 5- | sort)
 echo "The following packages will be added to ${input_iso} and installed in the final system:"
 for P in ${iso_packages}; do
     echo "   $P"

@@ -9,8 +9,7 @@ URL:            http://www.nethserver.org
 Source0:        %{name}-%{version}.tar.gz
 
 Requires: mock => 1.2.3
-Requires: fuse
-Requires: fuse-iso
+Requires: fuseiso
 Requires: genisoimage
 Requires: intltool
 Requires: isomd5sum
