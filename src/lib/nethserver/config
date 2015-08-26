@@ -4,10 +4,10 @@
 #
 
 # Mock configuration
-mock_config=nethserver-iso-6.6-x86_64
+mock_config=nethserver-iso-6.7-x86_64
 
 # Strings for ISO file name and isolinux.cfg
 product_name="NethServer"
-product_version=6.6
+product_version=6.7
 product_arch=x86_64
 
