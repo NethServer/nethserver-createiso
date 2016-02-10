@@ -31,11 +31,9 @@ Create NethServer ISO file starting from CentOS minimal ISO
 rm -rf %{buildroot}
 mkdir -vp  %{buildroot}/%{_bindir} %{buildroot}/%{_sysconfdir}/mock %{buildroot}/%{_datadir}/%{name}
 install -m 0755 -vp src/bin/createiso %{buildroot}/%{_bindir}
-install -m 0644 -vp src/mock/nethserver-iso-6.7-x86_64.cfg %{buildroot}/%{_sysconfdir}/mock
 install -m 0644 -vp src/mock/nethserver-iso-7-x86_64.cfg %{buildroot}/%{_sysconfdir}/mock
-install -m 0644 -vp src/mock/nethserver-enterprise-iso-6.7-x86_64.cfg %{buildroot}/%{_sysconfdir}/mock
 install -m 0644 -vp src/lib/isolinux.cfg %{buildroot}/%{_datadir}/%{name}
-install -m 0644 -vp src/lib/RPM-GPG-KEY-NethServer-6 %{buildroot}/%{_datadir}/%{name}
+install -m 0644 -vp src/lib/RPM-GPG-KEY-NethServer-7 %{buildroot}/%{_datadir}/%{name}
 
 LIB_FILES="
 nethserver-enterprise/splash.png
@@ -47,11 +45,7 @@ nethserver/convert.sh
 nethserver/splash.png
 nethserver/splash.jpg
 nethserver/config
-ks/ks-crypted.cfg
-ks/start.ks
 ks/ks-unattended.cfg
-ks/end.ks
-ks/installer
 "
 
 for F in $LIB_FILES; do
@@ -68,7 +62,7 @@ done
 %defattr(-,root,root,-)
 %{_bindir}/createiso
 %{_datadir}/%{name}/isolinux.cfg
-%{_datadir}/%{name}/RPM-GPG-KEY-NethServer-6
+%{_datadir}/%{name}/RPM-GPG-KEY-NethServer-7
 %config(noreplace) %{_sysconfdir}/mock/nethserver-iso-7-x86_64.cfg
 %config %{_datadir}/%{name}/nethserver/config
 %config %{_datadir}/%{name}/nethserver-enterprise/config
