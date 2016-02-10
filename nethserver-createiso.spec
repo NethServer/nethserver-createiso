@@ -69,9 +69,7 @@ done
 %{_bindir}/createiso
 %{_datadir}/%{name}/isolinux.cfg
 %{_datadir}/%{name}/RPM-GPG-KEY-NethServer-6
-%config(noreplace) %{_sysconfdir}/mock/nethserver-iso-6.7-x86_64.cfg
 %config(noreplace) %{_sysconfdir}/mock/nethserver-iso-7-x86_64.cfg
-%config(noreplace) %{_sysconfdir}/mock/nethserver-enterprise-iso-6.7-x86_64.cfg
 %config %{_datadir}/%{name}/nethserver/config
 %config %{_datadir}/%{name}/nethserver-enterprise/config
 %doc COPYING
