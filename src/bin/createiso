@@ -161,7 +161,6 @@ echo "Copying syslinux hardware detection tool..."
 cp -v /usr/share/syslinux/hdt.c32 ${CLONE_ISO}/isolinux/
 
 echo "Copying kickstart files..."
-cat ${ISO_LIB}/ks/{start.ks,installer,end.ks} > ${CLONE_ISO}/ks/ks-interactive.cfg
 cat ${ISO_LIB}/ks/ks-unattended.cfg > ${CLONE_ISO}/ks/ks-unattended.cfg
 
 echo "Downloading packages from @nethserver-iso group and their dependencies..."
