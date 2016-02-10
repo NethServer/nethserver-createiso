@@ -1,5 +1,5 @@
 Name:           nethserver-createiso
-Version: 1.1.1
+Version: 1.2.0
 Release: 1%{?dist}
 Summary:        Create NethServer ISO file
 BuildArch:	noarch
@@ -31,9 +31,9 @@ Create NethServer ISO file starting from CentOS minimal ISO
 rm -rf %{buildroot}
 mkdir -vp  %{buildroot}/%{_bindir} %{buildroot}/%{_sysconfdir}/mock %{buildroot}/%{_datadir}/%{name}
 install -m 0755 -vp src/bin/createiso %{buildroot}/%{_bindir}
-install -m 0644 -vp src/mock/nethserver-iso-6.6-x86_64.cfg %{buildroot}/%{_sysconfdir}/mock
+install -m 0644 -vp src/mock/nethserver-iso-6.7-x86_64.cfg %{buildroot}/%{_sysconfdir}/mock
 install -m 0644 -vp src/mock/nethserver-iso-7-x86_64.cfg %{buildroot}/%{_sysconfdir}/mock
-install -m 0644 -vp src/mock/nethserver-enterprise-iso-6.6-x86_64.cfg %{buildroot}/%{_sysconfdir}/mock
+install -m 0644 -vp src/mock/nethserver-enterprise-iso-6.7-x86_64.cfg %{buildroot}/%{_sysconfdir}/mock
 install -m 0644 -vp src/lib/isolinux.cfg %{buildroot}/%{_datadir}/%{name}
 install -m 0644 -vp src/lib/RPM-GPG-KEY-NethServer-6 %{buildroot}/%{_datadir}/%{name}
 
@@ -69,14 +69,17 @@ done
 %{_bindir}/createiso
 %{_datadir}/%{name}/isolinux.cfg
 %{_datadir}/%{name}/RPM-GPG-KEY-NethServer-6
-%config(noreplace) %{_sysconfdir}/mock/nethserver-iso-6.6-x86_64.cfg
+%config(noreplace) %{_sysconfdir}/mock/nethserver-iso-6.7-x86_64.cfg
 %config(noreplace) %{_sysconfdir}/mock/nethserver-iso-7-x86_64.cfg
-%config(noreplace) %{_sysconfdir}/mock/nethserver-enterprise-iso-6.6-x86_64.cfg
+%config(noreplace) %{_sysconfdir}/mock/nethserver-enterprise-iso-6.7-x86_64.cfg
 %config %{_datadir}/%{name}/nethserver/config
 %config %{_datadir}/%{name}/nethserver-enterprise/config
 %doc COPYING
 
 %changelog
+* Wed Aug 26 2015 Davide Principi <davide.principi@nethesis.it> - 1.2.0-1
+- Mock configuration for NethServer 6.7 ISO - Enhancement #3245 [NethServer]
+
 * Wed Mar 18 2015 Davide Principi <davide.principi@nethesis.it> - 1.1.1-1
 - Install dependencies from nethesis-updates.
 - Print out extra RPMs list and additional disk size.
