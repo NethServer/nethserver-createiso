@@ -29,11 +29,13 @@ Create NethServer ISO file starting from CentOS minimal ISO
 
 %install
 rm -rf %{buildroot}
-mkdir -vp  %{buildroot}/%{_bindir} %{buildroot}/%{_sysconfdir}/mock %{buildroot}/%{_datadir}/%{name}
+mkdir -vp  %{buildroot}/%{_bindir} %{buildroot}/%{_sysconfdir}/mock %{buildroot}/%{_datadir}/%{name} %{buildroot}/%{_datadir}/%{name}/pixmaps
 install -m 0755 -vp src/bin/createiso %{buildroot}/%{_bindir}
 install -m 0644 -vp src/mock/nethserver-iso-7-x86_64.cfg %{buildroot}/%{_sysconfdir}/mock
 install -m 0644 -vp src/lib/isolinux.cfg %{buildroot}/%{_datadir}/%{name}
 install -m 0644 -vp src/lib/RPM-GPG-KEY-NethServer-7 %{buildroot}/%{_datadir}/%{name}
+cp -r src/pixmaps %{buildroot}/%{_datadir}/%{name}
+
 
 LIB_FILES="
 nethserver-enterprise/splash.png
@@ -63,6 +65,7 @@ done
 %{_bindir}/createiso
 %{_datadir}/%{name}/isolinux.cfg
 %{_datadir}/%{name}/RPM-GPG-KEY-NethServer-7
+%{_datadir}/%{name}/pixmaps
 %config(noreplace) %{_sysconfdir}/mock/nethserver-iso-7-x86_64.cfg
 %config %{_datadir}/%{name}/nethserver/config
 %config %{_datadir}/%{name}/nethserver-enterprise/config

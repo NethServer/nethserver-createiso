@@ -133,6 +133,7 @@ fi
 # Temporary directories:
 MOUNT_ISO=`mktemp -d --tmpdir=${WORKDIR} mnt.XXXXXX`
 CLONE_ISO=`mktemp -d --tmpdir=${WORKDIR} iso.XXXXXX`
+PRODUCT_IMG=`mktemp -d --tmpdir=${WORKDIR} product.XXXX`
 
 function cleanup_temporary_files {
     echo "Cleaning up temporary files..."
@@ -156,6 +157,13 @@ cp -v $BRAND_DIR/splash.jpg ${CLONE_ISO}/isolinux/
 echo "Creating isolinux configuration..."
 sed "s/_PRODUCTVERSION_/${product_version}/
 s/_PRODUCTNAME_/${product_name}/" $ISO_LIB/isolinux.cfg > ${CLONE_ISO}/isolinux/isolinux.cfg
+
+echo "Creating product img..."
+mkdir -p $PRODUCT_IMG/product/usr/share/anaconda/
+cp -rv $ISO_LIB/pixmaps $PRODUCT_IMG/product/usr/share/anaconda/
+cd $PRODUCT_IMG/product
+find . | cpio -c -o | gzip -9cv > $PRODUCT_IMG/product.img
+cp -v $PRODUCT_IMG/product.img  ${CLONE_ISO}/images
 
 echo "Copying syslinux hardware detection tool..."
 cp -v /usr/share/syslinux/hdt.c32 ${CLONE_ISO}/isolinux/
