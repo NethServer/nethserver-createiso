@@ -75,14 +75,12 @@ fi
 #
 # Selected packages
 #
-%packages 
+%packages
 @nethserver-iso
 @core
 %end
 
-repo --name=nethserver --baseurl=file:///run/install/repo/extras 
-
-services --enabled=chronyd,nethserver-system-init,nethserver-config-network --disabled=NetworkManager,firewalld,kdump
+repo --name=nethserver --baseurl=file:///run/install/repo/extras
 
 # Install OS instead of upgrade
 install
@@ -101,12 +99,12 @@ logging --level=debug
 # Clear the Master Boot Record
 zerombr
 # Partition clearing information
-clearpart --all  
+clearpart --all
 # Disk partitioning information
 %include /tmp/part-include
 # LVM
-volgroup VolGroup pv.1 
-logvol swap --fstype swap --name=lv_swap --vgname=VolGroup --recommended --maxsize=6000 
+volgroup VolGroup pv.1
+logvol swap --fstype swap --name=lv_swap --vgname=VolGroup --recommended --maxsize=6000
 %include /tmp/rootfs-include
 # Reboot and eject CD
 reboot --eject
@@ -122,7 +120,9 @@ echo "Importing RPM GPG keys..."
 rpm --import /etc/pki/rpm-gpg/*
 
 echo "Enable nethserver units..."
-systemctl enable nethserver-system-init nethserver-config-network
+systemctl enable nethserver-system-init
+systemctl enable nethserver-config-network
+systemctl disable NetworkManager
 
 echo "Disable kdump..."
 systemctl disable kdump
