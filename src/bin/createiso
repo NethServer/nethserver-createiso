@@ -170,7 +170,7 @@ echo "Copying syslinux hardware detection tool..."
 cp -v /usr/share/syslinux/hdt.c32 ${CLONE_ISO}/isolinux/
 
 echo "Copying kickstart files..."
-cp -vp ${ISO_LIB}/ks/* > ${CLONE_ISO}/ks/
+cp -vp ${ISO_LIB}/ks/* ${CLONE_ISO}/ks/
 
 echo "Downloading packages from @nethserver-iso group and their dependencies..."
 mock -r ${mock_config} --yum-cmd -- --downloadonly --downloaddir=${CLONE_ISO}/extras reinstall yum-plugin-downloadonly || :
