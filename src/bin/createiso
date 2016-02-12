@@ -160,7 +160,7 @@ s/_PRODUCTNAME_/${product_name}/" $ISO_LIB/isolinux.cfg > ${CLONE_ISO}/isolinux/
 
 echo "Creating product img..."
 mkdir -p $PRODUCT_IMG/product/usr/share/anaconda/
-cp -rv $ISO_LIB/pixmaps $PRODUCT_IMG/product/usr/share/anaconda/
+cp -rv $BRAND_DIR/pixmaps $PRODUCT_IMG/product/usr/share/anaconda/
 cd $PRODUCT_IMG/product
 find . | cpio -c -o | gzip -9cv > $PRODUCT_IMG/product.img
 cp -v $PRODUCT_IMG/product.img  ${CLONE_ISO}/images
