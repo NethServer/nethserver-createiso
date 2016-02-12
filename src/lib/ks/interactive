@@ -62,24 +62,6 @@ for net in `find /sys/class/net/ ! -name lo | cut -d '/' -f5`; do
     echo "network --onboot=yes --bootproto=dhcp --device=$net" --nameserver=8.8.8.8 >>/tmp/network-include
 done
 
-# set keyboard
-if [ -z $keyboard ]; then
-   keyboard=us
-fi
-echo "keyboard $keyboard" > /tmp/keyboard-include
-
-# set language
-if [ -z $lang ]; then
-   lang=en_US
-fi
-echo "lang $lang" > /tmp/lang-include
-
-# set timezone
-if [ -z $timezone ]; then
-   timezone="--utc Greenwich"
-fi
-echo "timezone $timezone" > /tmp/timezone-include
-
 # set encrypted fs
 if [ -z $fspassword ]; then
    echo "logvol / --fstype xfs --name=lv_root --vgname=VolGroup --size=5000 --grow" > /tmp/rootfs-include
@@ -90,32 +72,30 @@ fi
 
 %end
 
-# Use text mode install
-text
+#
+# Selected packages
+#
+%packages 
+@nethserver-iso
+@core
+%end
+
+repo --name=nethserver --baseurl=file:///run/install/repo/extras 
+
+services --enabled=chronyd,nethserver-system-init,nethserver-config-network --disabled=NetworkManager,firewalld,kdump
+
 # Install OS instead of upgrade
 install
-# Firewall configuration
-firewall --enabled --ssh
-# Use CDROM installation media
-cdrom
 # Network information
 %include /tmp/network-include
-# Root password
-rootpw --plaintext Nethesis,1234
-# System authorization information
-auth  --useshadow  --passalgo=sha512
-# System keyboard
-%include /tmp/keyboard-include
 # System language
-%include /tmp/lang-include
+lang en_US
 # SELinux configuration
 selinux --permissive
 # Do not configure the X Window System
 skipx
 # Installation logging level
 logging --level=debug
-# System timezone
-%include /tmp/timezone-include
 # System bootloader configuration
 %include /tmp/bootloader-include
 # Clear the Master Boot Record
@@ -131,63 +111,20 @@ logvol swap --fstype swap --name=lv_swap --vgname=VolGroup --recommended --maxsi
 # Reboot and eject CD
 reboot --eject
 
-%post --nochroot --interpreter /bin/bash
-exec 1>/mnt/sysimage/root/kickstart-stage1.log 2>&1
-
-if [ -f /tmp/raid ]; then
-    cat /tmp/raid >> /mnt/sysimage/etc/mdadm.conf
-fi
-
-if [ -f /tmp/repo ]; then
-    cp /tmp/repo /mnt/sysimage/root/repo
-else
-    echo "Copying extras repo to /root.."
-    cp -r /run/install/repo/extras /mnt/sysimage/root
-fi
-%end
 
 %post --interpreter /bin/bash
-exec 1>/root/kickstart-stage2.log 2>&1
-
-TMPEXTRAS_DIR=/tmp/yumextras
-EXTRAS_DIR=/root/extras
-
-if [ -f /root/repo ]; then
-   . /root/repo
-else
-   REPO="file://$EXTRAS_DIR"
-fi
-
-mkdir -p ${TMPEXTRAS_DIR}
-
-echo "Initializing temporary yum repository ($REPO)..."
-cat > ${TMPEXTRAS_DIR}/yumextras.conf << EOF
-[main]
-cachedir=${TMPEXTRAS_DIR}/cache
-logfile=${TMPEXTRAS_DIR}/yum.log
-debuglevel=2
-reposdir=/dev/null
-retries=20
-obsoletes=1
-gpgcheck=0
-assumeyes=1
-metadata_expire=never
-mirrorlist_expire=never
-
-[extras]
-name=extras
-baseurl=$REPO
-enabled=1
-
-EOF
-
-echo "Installing nethserver-iso package group..."
-yum -c ${TMPEXTRAS_DIR}/yumextras.conf -y groupinstall nethserver-iso
+exec 1>/root/kickstart-post.log 2>&1
 
 echo "Enabling first-boot..."
 touch /var/spool/first-boot
 
-echo "Removing installation files..."
-rm -rfv ${TMPEXTRAS_DIR} ${EXTRAS_DIR}
+echo "Importing RPM GPG keys..."
+rpm --import /etc/pki/rpm-gpg/*
+
+echo "Enable nethserver units..."
+systemctl enable nethserver-system-init nethserver-config-network
+
+echo "Disable kdump..."
+systemctl disable kdump
 
 %end

@@ -46,7 +46,6 @@ nethserver/convert.sh
 nethserver/splash.png
 nethserver/splash.jpg
 nethserver/config
-ks/ks-unattended.cfg
 nethserver/pixmaps/rnotes/en/centos-artwork.png
 nethserver/pixmaps/rnotes/en/centos-cloud.png
 nethserver/pixmaps/rnotes/en/centos-core.png
@@ -55,6 +54,8 @@ nethserver/pixmaps/rnotes/en/centos-virtualization.png
 nethserver/pixmaps/sidebar-bg.png
 nethserver/pixmaps/sidebar-logo.png
 nethserver/pixmaps/topbar-bg.png
+ks/unattended
+ks/interactive
 "
 
 for F in $LIB_FILES; do
