@@ -133,13 +133,14 @@ fi
 # Temporary directories:
 MOUNT_ISO=`mktemp -d --tmpdir=${WORKDIR} mnt.XXXXXX`
 CLONE_ISO=`mktemp -d --tmpdir=${WORKDIR} iso.XXXXXX`
-PRODUCT_IMG=`mktemp -d --tmpdir=${WORKDIR} product.XXXX`
+PRODUCT_IMG=`mktemp -d --tmpdir=${WORKDIR} product.XXXXXX`
 
 function cleanup_temporary_files {
     echo "Cleaning up temporary files..."
     fusermount -q -u ${MOUNT_ISO}
     [ -d ${MOUNT_ISO} ] && rmdir ${MOUNT_ISO}
     [ -d ${CLONE_ISO} ] && rm -rf ${CLONE_ISO}
+    [ -d ${PRODUCT_IMG} ] && rm -rf ${PRODUCT_IMG}
     [ -f ${COMPS_TMP} ] && rm ${COMPS_TMP}
     mock -r ${mock_config} --clean
 }
