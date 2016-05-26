@@ -32,8 +32,8 @@ Create NethServer ISO file starting from CentOS minimal ISO
 rm -rf %{buildroot}
 mkdir -vp  %{buildroot}/%{_bindir} %{buildroot}/%{_sysconfdir}/mock %{buildroot}/%{_datadir}/%{name}
 install -m 0755 -vp src/bin/createiso %{buildroot}/%{_bindir}
-install -m 0644 -vp src/mock/nethserver-iso-6.7-x86_64.cfg %{buildroot}/%{_sysconfdir}/mock
-install -m 0644 -vp src/mock/nethserver-enterprise-iso-6.7-x86_64.cfg %{buildroot}/%{_sysconfdir}/mock
+install -m 0644 -vp src/mock/nethserver-iso-6.8-x86_64.cfg %{buildroot}/%{_sysconfdir}/mock
+install -m 0644 -vp src/mock/nethserver-enterprise-iso-6.8-x86_64.cfg %{buildroot}/%{_sysconfdir}/mock
 install -m 0644 -vp src/lib/isolinux.cfg %{buildroot}/%{_datadir}/%{name}
 install -m 0644 -vp src/lib/RPM-GPG-KEY-NethServer-6 %{buildroot}/%{_datadir}/%{name}
 
@@ -69,8 +69,8 @@ done
 %{_bindir}/createiso
 %{_datadir}/%{name}/isolinux.cfg
 %{_datadir}/%{name}/RPM-GPG-KEY-NethServer-6
-%config(noreplace) %{_sysconfdir}/mock/nethserver-iso-6.7-x86_64.cfg
-%config(noreplace) %{_sysconfdir}/mock/nethserver-enterprise-iso-6.7-x86_64.cfg
+%config(noreplace) %{_sysconfdir}/mock/nethserver-iso-6.8-x86_64.cfg
+%config(noreplace) %{_sysconfdir}/mock/nethserver-enterprise-iso-6.8-x86_64.cfg
 %config %{_datadir}/%{name}/nethserver/config
 %config %{_datadir}/%{name}/nethserver-enterprise/config
 %doc COPYING
