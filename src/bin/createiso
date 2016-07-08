@@ -177,9 +177,7 @@ echo "Copying kickstart files..."
 cp -vp ${ISO_LIB}/ks/* ${CLONE_ISO}/ks/
 
 echo "Downloading packages from @nethserver-iso group and their dependencies..."
-mock -r ${mock_config} --yum-cmd -- --downloadonly --downloaddir=${CLONE_ISO}/extras reinstall yum-plugin-downloadonly || :
-mock -r ${mock_config} --yum-cmd -- --downloadonly --downloaddir=${CLONE_ISO}/extras install @nethserver-iso || :
-echo "[Ignore errors from bogus yum downloadonly exit code]"
+mock -r ${mock_config} --yum-cmd -- --downloadonly --downloaddir=${CLONE_ISO}/extras install @nethserver-iso
 
 echo "Extra RPMs added to ISO:"
 find ${CLONE_ISO}/extras -name '*.rpm' -printf "%f\n" | sort
