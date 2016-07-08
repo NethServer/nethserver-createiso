@@ -1,5 +1,5 @@
 Name:           nethserver-createiso
-Version: 1.2.0
+Version: 1.4.0
 Release: 1%{?dist}
 Summary:        Create NethServer ISO file
 BuildArch:	noarch
@@ -74,6 +74,9 @@ done
 %doc COPYING
 
 %changelog
+* Fri Jul 08 2016 Davide Principi <davide.principi@nethesis.it> - 1.4.0-1
+- Initial ns7 release
+
 * Wed Aug 26 2015 Davide Principi <davide.principi@nethesis.it> - 1.2.0-1
 - Mock configuration for NethServer 6.7 ISO - Enhancement #3245 [NethServer]
 
