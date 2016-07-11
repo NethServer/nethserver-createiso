@@ -7,10 +7,6 @@ set -- `cat /proc/cmdline`
 
 for I in $*; do case "$I" in *=*) eval $I;; esac; done
 
-if [ "x$repo" != "x" ]; then
-    echo "REPO='$repo/extras'" > /tmp/repo
-fi
-
 # Determine how many drives we have
 set $(list-harddrives)
 if [ -z "$disks" ]; then
