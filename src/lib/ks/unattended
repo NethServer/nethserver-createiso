@@ -55,8 +55,9 @@ fi
 
 # enable dhcp on all network interfaces
 for net in `find /sys/class/net/ ! -name lo | cut -d '/' -f5`; do
-    echo "network --onboot=yes --bootproto=dhcp --device=$net" --nameserver=8.8.8.8 >>/tmp/network-include
+    echo "network --onboot=yes --bootproto=dhcp --device=$net" >>/tmp/network-include
 done
+echo "network --nameserver=8.8.8.8 --hostname=localhost.localdomain" >> /tmp/network-include
 
 # set keyboard
 if [ -z $keyboard ]; then
