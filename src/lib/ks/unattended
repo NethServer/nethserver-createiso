@@ -8,49 +8,54 @@ set -- `cat /proc/cmdline`
 for I in $*; do case "$I" in *=*) eval $I;; esac; done
 
 # Determine how many drives we have
-set $(list-harddrives)
 if [ -z "$disks" ]; then
-    let numd=$#/2
-    d1=$1
-    d1_size=$2
-    d2=$3
-    d2_size=$4
+    disks=()
+    tmp=( $(list-harddrives | cut -d' ' -f 1) )
+    for d in "${tmp[@]}"
+    do
+        if [[ $d == md* ]]; then
+            # skip md raid devices
+            continue
+        fi
+        mount | grep -q /dev/$d
+        if [ $? -gt 0 ]; then
+            disks+=($d)
+        fi
+    done
+
+    numd=${#disks[@]}
+    d1=${disks[0]}
+    d2=${disks[1]}
 else
     d1=`echo $disks | awk 'BEGIN { FS = "," } ; { print $1 }'`
     d2=`echo $disks | awk 'BEGIN { FS = "," } ; { print $2 }'`
     if [ -z "$d2" ]; then
-       numd=2
+       numd=1
     else
-       numd=4
+       numd=2
     fi
 fi
 
 if [ $numd -lt 2 ] || [ $raid = "none"  ] ; then
-    target=$d1
-
     cat <<EOF >> /tmp/part-include
     # 1 disk, no raid
     part /boot --fstype xfs --size 512
-    part pv.1 --asprimary --fstype='physical volume (LVM)' --ondisk=$target --size=5000 --grow
+    part pv.1 --asprimary --fstype='physical volume (LVM)' --ondisk=$d1 --size=5000 --grow
 EOF
-    echo "bootloader --location=mbr --driveorder=\"$d1\" --append=\" rhgb crashkernel=auto quiet\"" > /tmp/bootloader-include
+    echo "bootloader --location=mbr " > /tmp/bootloader-include
 elif [ $numd -ge 2 ]; then
-
-    target1=$d1
-    target2=$d2
-
     cat <<EOF >> /tmp/part-include
     # 2 disks, raid 1
-    part raid.00 --asprimary --fstype='raid' --ondisk=$target1 --size=512 # boot
-    part raid.01 --asprimary --fstype='raid' --ondisk=$target1 --size=5000 --grow# root
+    part raid.00 --asprimary --fstype='raid' --ondisk=$d1 --size=512 # boot
+    part raid.01 --asprimary --fstype='raid' --ondisk=$d1 --size=5000 --grow# root
 
-    part raid.10 --asprimary --fstype='raid' --ondisk=$target2 --size=512 # boot
-    part raid.11 --asprimary --fstype='raid' --ondisk=$target2 --size=5000 --grow# root
+    part raid.10 --asprimary --fstype='raid' --ondisk=$d2 --size=512 # boot
+    part raid.11 --asprimary --fstype='raid' --ondisk=$d2 --size=5000 --grow# root
 
     raid /boot --device=md1 --fstype='xfs' --level=1 raid.00 raid.10
     raid pv.1 --device=md2 --fstype='physical volume (LVM)' --level=1 raid.01 raid.11
 EOF
-    echo "bootloader --location=mbr --driveorder='$target1,$target2' --append=' rhgb crashkernel=auto quiet '" > /tmp/bootloader-include
+    echo "bootloader --location=mbr " > /tmp/bootloader-include
 fi
 
 # enable dhcp on all network interfaces
