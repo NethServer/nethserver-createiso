@@ -1,5 +1,5 @@
 Name:           nethserver-createiso
-Version: 1.4.0
+Version: 1.4.1
 Release: 1%{?dist}
 Summary:        Create NethServer ISO file
 BuildArch:	noarch
@@ -74,6 +74,9 @@ done
 %doc COPYING
 
 %changelog
+* Fri Sep 02 2016 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.4.1-1
+- Improve USB installation - NethServer/dev#5085
+
 * Fri Jul 08 2016 Davide Principi <davide.principi@nethesis.it> - 1.4.0-1
 - Initial ns7 release
 
