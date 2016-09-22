@@ -32,11 +32,20 @@ rm -rf %{buildroot}
 mkdir -vp  %{buildroot}/%{_bindir} %{buildroot}/%{_sysconfdir}/mock 
 install -m 0755 -vp src/bin/createiso %{buildroot}/%{_bindir}
 install -m 0644 -vp src/mock/nethserver-iso-7-x86_64.cfg %{buildroot}/%{_sysconfdir}/mock
+install -m 0644 -vp src/mock/nethserver-enterprise-iso-7-x86_64.cfg %{buildroot}/%{_sysconfdir}/mock
 
 LIB_FILES="
 nethserver-enterprise/splash.png
 nethserver-enterprise/splash.jpg
 nethserver-enterprise/config
+nethserver-enterprise/pixmaps/rnotes/en/centos-artwork.png
+nethserver-enterprise/pixmaps/rnotes/en/centos-cloud.png
+nethserver-enterprise/pixmaps/rnotes/en/centos-core.png
+nethserver-enterprise/pixmaps/rnotes/en/centos-promotion.png
+nethserver-enterprise/pixmaps/rnotes/en/centos-virtualization.png
+nethserver-enterprise/pixmaps/sidebar-bg.png
+nethserver-enterprise/pixmaps/sidebar-logo.png
+nethserver-enterprise/pixmaps/topbar-bg.png
 nethserver/splash.xcf
 nethserver/splash.xpm.gz
 nethserver/convert.sh
@@ -71,6 +80,7 @@ done
 %defattr(-,root,root,-)
 %attr(0755,root,root) %{_bindir}/createiso
 %config(noreplace) %{_sysconfdir}/mock/nethserver-iso-7-x86_64.cfg
+%config(noreplace) %{_sysconfdir}/mock/nethserver-enterprise-iso-7-x86_64.cfg
 %doc COPYING
 
 %changelog
