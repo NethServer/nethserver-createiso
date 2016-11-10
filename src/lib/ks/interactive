@@ -101,6 +101,7 @@ logging --level=debug
 zerombr
 # Partition clearing information
 clearpart --all
+reqpart --add-boot
 # Disk partitioning information
 %include /tmp/part-include
 # LVM

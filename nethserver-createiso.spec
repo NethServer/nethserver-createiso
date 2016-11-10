@@ -63,6 +63,7 @@ nethserver/pixmaps/topbar-bg.png
 ks/unattended
 ks/interactive
 isolinux.cfg
+grub.cfg
 RPM-GPG-KEY-NethServer-7
 "
 

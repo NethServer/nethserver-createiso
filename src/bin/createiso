@@ -156,12 +156,15 @@ mkdir -vp ${CLONE_ISO}/{isolinux,ks,extras}
 echo "Copying brand files..."
 cp -v $BRAND_DIR/splash.jpg ${CLONE_ISO}/isolinux/
 
-echo "Creating isolinux configuration..."
+echo "Creating ISOLINUX (legacy) configuration..."
 sed "s/_PRODUCTVERSION_/${product_version}/
 s/_PRODUCTNAME_/${product_name}/
 s/_LABEL_/${product_label}/g" $ISO_LIB/isolinux.cfg > ${CLONE_ISO}/isolinux/isolinux.cfg
 
-cat ${CLONE_ISO}/isolinux/isolinux.cfg
+echo "Creating GRUB2 (UEFI) configuration..."
+sed "s/_PRODUCTVERSION_/${product_version}/
+s/_PRODUCTNAME_/${product_name}/
+s/_LABEL_/${product_label}/g" $ISO_LIB/grub.cfg > ${CLONE_ISO}/EFI/BOOT/grub.cfg
 
 echo "Creating product img..."
 mkdir -p $PRODUCT_IMG/product/usr/share/anaconda/
