@@ -1,5 +1,5 @@
 Name:           nethserver-createiso
-Version: 1.4.3
+Version: 1.4.4
 Release: 1%{?dist}
 Summary:        Create NethServer ISO file
 BuildArch:	noarch
@@ -85,6 +85,9 @@ done
 %doc COPYING
 
 %changelog
+* Fri Dec 16 2016 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.4.4-1
+- Rebase on CentOS 7.3
+
 * Wed Nov 30 2016 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.4.3-1
 - Installation: support UEFI bios - NethServer/dev#5148
 
