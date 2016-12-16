@@ -59,16 +59,16 @@ EOF
 fi
 
 # enable dhcp on all network interfaces
-for net in `find /sys/class/net/ ! -name lo | cut -d '/' -f5`; do
+for net in `find /sys/class/net/ -mindepth 1 ! -name lo | cut -d '/' -f5`; do
     echo "network --onboot=yes --bootproto=dhcp --device=$net" >>/tmp/network-include
 done
 echo "network --nameserver=8.8.8.8 --hostname=localhost.localdomain" >> /tmp/network-include
 
 # set keyboard
 if [ -z $keyboard ]; then
-   keyboard=us
+   keyboard="keyboard --vckeymap=us --xlayouts='us'"
 fi
-echo "keyboard $keyboard" > /tmp/keyboard-include
+echo "keyboard --vckeymap=$keyboard --xlayouts='$keyboard'" > /tmp/keyboard-include
 
 # set timezone
 if [ -z $timezone ]; then

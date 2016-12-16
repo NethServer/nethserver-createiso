@@ -59,7 +59,7 @@ EOF
 fi
 
 # enable dhcp on all network interfaces
-for net in `find /sys/class/net/ ! -name lo | cut -d '/' -f5`; do
+for net in `find /sys/class/net/ -mindepth 1 ! -name lo | cut -d '/' -f5`; do
     echo "network --onboot=yes --bootproto=dhcp --device=$net" --nameserver=8.8.8.8 >>/tmp/network-include
 done
 
@@ -83,6 +83,8 @@ fi
 
 repo --name=nethserver --baseurl=file:///run/install/repo/extras
 
+# Set keyboard layout
+keyboard --vckeymap=us --xlayouts='us'
 # Install OS instead of upgrade
 install
 # Network information
