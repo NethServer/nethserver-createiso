@@ -83,8 +83,6 @@ fi
 
 repo --name=nethserver --baseurl=file:///run/install/repo/extras
 
-# Set keyboard layout
-keyboard --vckeymap=us --xlayouts='us'
 # Install OS instead of upgrade
 install
 # Network information
