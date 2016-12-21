@@ -60,7 +60,7 @@ fi
 
 # enable dhcp on all network interfaces
 for net in `find /sys/class/net/ -mindepth 1 ! -name lo | cut -d '/' -f5`; do
-    echo "network --onboot=yes --bootproto=dhcp --device=$net" --nameserver=8.8.8.8 >>/tmp/network-include
+    echo "network --activate --onboot=yes --bootproto=dhcp --device=$net" --nameserver=8.8.8.8 >>/tmp/network-include
 done
 
 # set encrypted fs
