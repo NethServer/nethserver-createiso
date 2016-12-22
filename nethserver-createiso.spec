@@ -1,5 +1,5 @@
 Name:           nethserver-createiso
-Version: 1.4.4
+Version: 1.4.5
 Release: 1%{?dist}
 Summary:        Create NethServer ISO file
 BuildArch:	noarch
@@ -85,6 +85,9 @@ done
 %doc COPYING
 
 %changelog
+* Thu Dec 22 2016 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.4.5-1
+- ISO installer: keyboard layout ignored - Bug NethServer/dev#5178
+
 * Fri Dec 16 2016 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.4.4-1
 - Rebase on CentOS 7.3
 
