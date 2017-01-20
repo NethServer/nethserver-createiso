@@ -100,6 +100,7 @@ repo --name=nethserver --baseurl=file:///run/install/repo/extras
 install
 # Network information
 %include /tmp/network-include
+firewall --disable
 # Root password
 rootpw --plaintext Nethesis,1234
 # System keyboard
@@ -143,7 +144,7 @@ rpm --import /etc/pki/rpm-gpg/*
 echo "Enable nethserver units..."
 systemctl enable nethserver-system-init
 systemctl enable nethserver-config-network
-systemctl disable NetworkManager
+systemctl disable NetworkManager firewalld
 
 echo "Disable kdump..."
 systemctl disable kdump

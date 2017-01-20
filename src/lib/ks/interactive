@@ -87,6 +87,7 @@ repo --name=nethserver --baseurl=file:///run/install/repo/extras
 install
 # Network information
 %include /tmp/network-include
+firewall --disable
 # System language
 lang en_US
 # SELinux configuration
@@ -124,7 +125,7 @@ rpm --import /etc/pki/rpm-gpg/*
 echo "Enable nethserver units..."
 systemctl enable nethserver-system-init
 systemctl enable nethserver-config-network
-systemctl disable NetworkManager
+systemctl disable NetworkManager firewalld
 
 echo "Disable kdump..."
 systemctl disable kdump
