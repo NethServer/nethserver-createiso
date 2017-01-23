@@ -1,0 +1,43 @@
+#platform=x86, AMD64, or Intel EM64T
+#version=RHEL7
+
+#
+# Selected packages
+#
+%packages
+@nethserver-iso
+@core
+%end
+
+repo --name=nethserver --baseurl=file:///run/install/repo/extras
+
+# Install OS instead of upgrade
+install
+firewall --disable
+# System language
+lang en_US
+# SELinux configuration
+selinux --permissive
+# Do not configure the X Window System
+skipx
+# Installation logging level
+logging --level=debug
+
+%post --interpreter /bin/bash
+exec 1>/root/kickstart-post.log 2>&1
+
+echo "Enabling first-boot..."
+touch /var/spool/first-boot
+
+echo "Importing RPM GPG keys..."
+rpm --import /etc/pki/rpm-gpg/*
+
+echo "Enable nethserver units..."
+systemctl enable nethserver-system-init
+systemctl enable nethserver-config-network
+systemctl disable NetworkManager firewalld
+
+echo "Disable kdump..."
+systemctl disable kdump
+
+%end
