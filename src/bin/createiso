@@ -169,8 +169,9 @@ s/_LABEL_/${product_label}/g" $ISO_LIB/grub.cfg > ${CLONE_ISO}/EFI/BOOT/grub.cfg
 echo "Creating product img..."
 mkdir -p $PRODUCT_IMG/product/usr/share/anaconda/
 cp -rv $BRAND_DIR/pixmaps $PRODUCT_IMG/product/usr/share/anaconda/
-cd $PRODUCT_IMG/product
+pushd $PRODUCT_IMG/product
 find . | cpio -c -o | gzip -9cv > $PRODUCT_IMG/product.img
+popd
 cp -v $PRODUCT_IMG/product.img  ${CLONE_ISO}/images
 
 echo "Copying syslinux hardware detection tool..."
