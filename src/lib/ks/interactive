@@ -130,4 +130,10 @@ systemctl disable NetworkManager firewalld
 echo "Disable kdump..."
 systemctl disable kdump
 
+if [ -f /etc/nethserver-release ]; then
+  echo "Fix /etc/issue..."
+  cp -f /etc/nethserver-release /etc/issue
+  echo -e 'Kernel \\r on an \\m\n' >> /etc/issue
+fi
+
 %end
