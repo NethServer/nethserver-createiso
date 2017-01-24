@@ -62,6 +62,7 @@ nethserver/pixmaps/sidebar-logo.png
 nethserver/pixmaps/topbar-bg.png
 ks/unattended
 ks/interactive
+ks/manual
 isolinux.cfg
 grub.cfg
 RPM-GPG-KEY-NethServer-7
