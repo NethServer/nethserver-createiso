@@ -1,5 +1,5 @@
 Name:           nethserver-createiso
-Version: 1.4.5
+Version: 1.5.0
 Release: 1%{?dist}
 Summary:        Create NethServer ISO file
 BuildArch:	noarch
@@ -86,6 +86,9 @@ done
 %doc COPYING
 
 %changelog
+* Thu Jan 26 2017 Davide Principi <davide.principi@nethesis.it> - 1.5.0-1
+- Add manual installation method to ISO - NethServer/dev#5204
+
 * Thu Dec 22 2016 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.4.5-1
 - ISO installer: keyboard layout ignored - Bug NethServer/dev#5178
 
