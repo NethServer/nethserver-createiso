@@ -1,5 +1,5 @@
 Name:           nethserver-createiso
-Version: 1.3.0
+Version: 1.3.1
 Release: 1%{?dist}
 Summary:        Create NethServer ISO file
 BuildArch:	noarch
@@ -76,6 +76,9 @@ done
 %doc COPYING
 
 %changelog
+* Wed Apr 26 2017 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.3.1-1
+- Upgrade to 6.9
+
 * Tue Jun 14 2016 Davide Principi <davide.principi@nethesis.it> - 1.3.0-1
 - Do not use mirrorlist in YUM config
 - NethServer 6.8 configuration
