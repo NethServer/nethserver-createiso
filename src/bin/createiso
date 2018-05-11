@@ -215,6 +215,15 @@ cat - > ${COMPS_TMP} <<EOF
 </comps>
 EOF
 
+echo "Removing duplicated rpms..."
+for f in $(find ${CLONE_ISO}/extras/ -name \*.rpm)
+do
+    fb=$(basename $f)
+    if [ -e "${CLONE_ISO}/Packages/$fb" ]; then
+       rm -vf $f
+    fi
+done
+
 echo "Creating yum repository with groups metadata..."
 createrepo -g ${COMPS_TMP} ${CLONE_ISO}/extras/
 
