@@ -40,6 +40,9 @@ systemctl disable NetworkManager firewalld
 echo "Disable kdump..."
 systemctl disable kdump
 
+echo "Forcing system time to UTC ..."
+sed -i 's/LOCAL/UTC/' /etc/adjtime
+
 if [ -f /etc/nethserver-release ]; then
   echo "Fix /etc/issue..."
   cp -f /etc/nethserver-release /etc/issue
