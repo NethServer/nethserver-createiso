@@ -245,8 +245,13 @@ echo "Executing isohybrid..."
 /usr/bin/isohybrid ${OUTPUT_ISO}
 
 echo "Creating ISO checksums ..."
-md5sum ${OUTPUT_ISO} > ${OUTPUT_ISO}.md5
-sha1sum ${OUTPUT_ISO} > ${OUTPUT_ISO}.sha1
+ISO_NAME=$(basename ${OUTPUT_ISO})
+pushd ${WORKDIR}
+md5sum ${ISO_NAME} > ${OUTPUT_ISO}.md5
+sha1sum ${ISO_NAME} > ${OUTPUT_ISO}.sha1
+touch -r ${ISO_NAME} ${OUTPUT_ISO}.md5
+touch -r ${ISO_NAME} ${OUTPUT_ISO}.sha1
+popd
 
 echo "*" 
 echo "* DONE. Written ISO file:"
