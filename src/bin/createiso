@@ -244,6 +244,10 @@ implantisomd5 --force "${OUTPUT_ISO}"
 echo "Executing isohybrid..."
 /usr/bin/isohybrid ${OUTPUT_ISO}
 
+echo "Creating ISO checksums ..."
+md5sum ${OUTPUT_ISO} > ${OUTPUT_ISO}.md5
+sha1sum ${OUTPUT_ISO} > ${OUTPUT_ISO}.sha1
+
 echo "*" 
 echo "* DONE. Written ISO file:"
 echo "*   ${OUTPUT_ISO}"
