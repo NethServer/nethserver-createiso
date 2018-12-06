@@ -17,6 +17,7 @@ Requires: syslinux
 Requires: tar
 Requires: createrepo
 Requires: yum-plugin-downloadonly
+Requires: mktorrent
 
 
 %description
@@ -66,6 +67,7 @@ ks/manual
 isolinux.cfg
 grub.cfg
 RPM-GPG-KEY-NethServer-7
+trackers.lst
 "
 
 for F in $LIB_FILES; do

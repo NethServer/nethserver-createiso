@@ -245,12 +245,21 @@ echo "Executing isohybrid..."
 /usr/bin/isohybrid ${OUTPUT_ISO}
 
 echo "Creating ISO checksums ..."
+torrent_udp_trackers="$(sed -rn '/^udp/p' /usr/share/nethserver-createiso/trackers.lst | sort -R | head -4 | tr $'\n' ,)"
+torrent_http_trackers="$(sed -rn '/^http/p' /usr/share/nethserver-createiso/trackers.lst | sort -R | head -4 | tr $'\n' ,)"
 ISO_NAME=$(basename ${OUTPUT_ISO})
 pushd ${WORKDIR}
 md5sum ${ISO_NAME} > ${OUTPUT_ISO}.md5
 sha1sum ${ISO_NAME} > ${OUTPUT_ISO}.sha1
 touch -r ${ISO_NAME} ${OUTPUT_ISO}.md5
 touch -r ${ISO_NAME} ${OUTPUT_ISO}.sha1
+rm -f ${OUTPUT_ISO}.torrent
+mktorrent \
+    -a udp://tracker.opentrackr.org:1337/announce,udp://tracker.coppersurfer.tk:6969/announce,${torrent_udp_trackers%,} \
+    -w http://peersteers.org:80/announce,${torrent_http_trackers%,} \
+    -c "${product_name} -- ${product_website}" \
+    ${OUTPUT_ISO}
+touch -r ${ISO_NAME} ${OUTPUT_ISO}.torrent
 popd
 
 echo "*" 

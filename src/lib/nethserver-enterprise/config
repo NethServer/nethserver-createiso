@@ -8,6 +8,7 @@ mock_config=nethserver-enterprise-iso-7-x86_64
 
 # Strings for ISO file name and isolinux.cfg
 product_name="NethServer Enterprise"
+product_website="http://www.nethesis.it"
 product_version=7
 product_arch=x86_64
 
