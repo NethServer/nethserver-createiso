@@ -1,5 +1,5 @@
 Name:           nethserver-createiso
-Version: 1.5.0
+Version: 1.6.0
 Release: 1%{?dist}
 Summary:        Create NethServer ISO file
 BuildArch:	noarch
@@ -88,6 +88,13 @@ done
 %doc COPYING
 
 %changelog
+* Fri Dec 07 2018 Davide Principi <davide.principi@nethesis.it> - 1.6.0-1
+- Require specific repo version
+- Create ISO hashes and torrent
+- Show Nethserver web interface URLs on login via /etc/issue
+- Force system time to UTC
+- ks: fixes for CentOS 7.4
+
 * Thu Jan 26 2017 Davide Principi <davide.principi@nethesis.it> - 1.5.0-1
 - Add manual installation method to ISO - NethServer/dev#5204
 
