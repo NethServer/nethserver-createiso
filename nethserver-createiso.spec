@@ -1,5 +1,5 @@
 Name:           nethserver-createiso
-Version: 1.6.1
+Version: 1.7.0
 Release: 1%{?dist}
 Summary:        Create NethServer ISO file
 BuildArch:	noarch
@@ -88,6 +88,9 @@ done
 %doc COPYING
 
 %changelog
+* Tue Oct 01 2019 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.7.0-1
+- Changes for NS 7.7.1908 release
+
 * Thu Dec 13 2018 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.6.1-1
 - Fix primary Torrent trackers URLs
 
