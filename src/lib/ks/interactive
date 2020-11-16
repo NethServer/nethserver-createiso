@@ -138,7 +138,6 @@ if [ -f /etc/nethserver-release ]; then
   cp -f /etc/nethserver-release /etc/issue
   echo -e 'Kernel \\r on an \\m\n' >> /etc/issue
   echo 'Access the web interface at the following URLs:' >> /etc/issue
-  ip -o -4 addr | tr -s ' /' $'\t' | cut -f 4 | grep -vF 127.0.0.1 | xargs -I IP -- echo https://IP:980 >> /etc/issue
   ip -o -4 addr | tr -s ' /' $'\t' | cut -f 4 | grep -vF 127.0.0.1 | xargs -I IP -- echo https://IP:9090 >> /etc/issue
   echo >> /etc/issue
 fi
