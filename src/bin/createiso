@@ -135,6 +135,7 @@ fi
 MOUNT_ISO=`mktemp -d --tmpdir=${WORKDIR} mnt.XXXXXX`
 CLONE_ISO=`mktemp -d --tmpdir=${WORKDIR} iso.XXXXXX`
 PRODUCT_IMG=`mktemp -d --tmpdir=${WORKDIR} product.XXXXXX`
+RPM_TMP=`mktemp -u --tmpdir=${WORKDIR} rpm.XXXXXX`
 
 function cleanup_temporary_files {
     echo "Cleaning up temporary files..."
@@ -142,6 +143,7 @@ function cleanup_temporary_files {
     [ -d ${MOUNT_ISO} ] && rmdir ${MOUNT_ISO}
     [ -d ${CLONE_ISO} ] && rm -rf ${CLONE_ISO}
     [ -d ${PRODUCT_IMG} ] && rm -rf ${PRODUCT_IMG}
+    [ -d ${RPM_TMP} ] && rm -rf ${RPM_TMP}
     [ -f ${COMPS_TMP} ] && rm ${COMPS_TMP}
     mock -r ${mock_config} --clean
 }
@@ -181,7 +183,9 @@ echo "Copying kickstart files..."
 cp -vp ${ISO_LIB}/ks/* ${CLONE_ISO}/ks/
 
 echo "Downloading packages from @nethserver-iso group and their dependencies..."
-mock -r ${mock_config} --yum-cmd -- --downloadonly --downloaddir=${CLONE_ISO}/extras install @nethserver-iso
+mock -r ${mock_config} --yum-cmd -- --downloadonly install @nethserver-iso
+mock -r ${mock_config} --copyout /var/cache/yum/ ${RPM_TMP}
+find ${RPM_TMP} -name '*.rpm' -exec mv '{}' ${CLONE_ISO}/extras \;
 
 echo "Extra RPMs added to ISO:"
 find ${CLONE_ISO}/extras -name '*.rpm' -printf "%f\n" | sort
