@@ -1,5 +1,5 @@
 Name:           nethserver-createiso
-Version: 1.7.0
+Version: 1.7.1
 Release: 1%{?dist}
 Summary:        Create NethServer ISO file
 BuildArch:	noarch
@@ -88,6 +88,9 @@ done
 %doc COPYING
 
 %changelog
+* Thu Nov 19 2020 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.7.1-1
+- NS 7.9.2009 rollout task list - NethServer/dev#6330
+
 * Tue Oct 01 2019 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.7.0-1
 - Changes for NS 7.7.1908 release
 
